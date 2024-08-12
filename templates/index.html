@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="body d-flex py-3">
+
+    <div class="container-xxl">
+
+        <!-- Dashboard Cards -->
+        <div class="row g-3 mb-3 row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-2 row-cols-xl-4">
+            <div class="col">
+                <div class="alert-success alert mb-0">
+                    <div class="d-flex align-items-center">
+                        <div class="avatar rounded no-thumbnail bg-success text-light"><i class="fa fa-dollar fa-lg"></i></div>
+                        <div class="flex-fill ms-3 text-truncate">
+                            <div class="h6 mb-0">Total Income Tax</div>
+                            <span class="small">Ksh {{ total_income_tax }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="alert-warning alert mb-0">
+                    <div class="d-flex align-items-center">
+                        <div class="avatar rounded no-thumbnail bg-warning text-light"><i class="fa fa-smile-o fa-lg"></i></div>
+                        <div class="flex-fill ms-3 text-truncate">
+                            <div class="h6 mb-0">Total VAT</div>
+                            <span class="small">Ksh {{ total_vat }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="alert-danger alert mb-0">
+                    <div class="d-flex align-items-center">
+                        <div class="avatar rounded no-thumbnail bg-danger text-light"><i class="fa fa-times-circle fa-lg"></i></div>
+                        <div class="flex-fill ms-3 text-truncate">
+                            <div class="h6 mb-0">Compliance Issues</div>
+                            <span class="small">{{ compliance_issues_count }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="alert-info alert mb-0">
+                    <div class="d-flex align-items-center">
+                        <div class="avatar rounded no-thumbnail bg-info text-light"><i class="fa fa-file-pdf-o fa-lg"></i></div>
+                        <div class="flex-fill ms-3 text-truncate">
+                            <div class="h6 mb-0">Reports Generated</div>
+                            <span class="small">{{ total_reports }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tax Summary Table -->
+        <div class="row g-3 mb-3">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
+                        <h6 class="m-0 fw-bold">Recent Tax Records</h6>
+                    </div>
+                    <div class="card-body">
+                        <table id="myDataTable" class="table table-hover align-middle mb-0" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>Tax Year</th>
+                                    <th>Total Income</th>
+                                    <th>Total VAT</th>
+                                    <th>Total Other Taxes</th>
+                                    <th>Total Tax Liability</th>
+                                    <th>Date Filed</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for tax_record in recent_tax_records %}
+                                <tr>
+                                    <td><strong>{{ tax_record.tax_year }}</strong></td>
+                                    <td>Ksh {{ tax_record.income }}</td>
+                                    <td>Ksh {{ tax_record.vat }}</td>
+                                    <td>Ksh {{ tax_record.other_taxes }}</td>
+                                    <td>Ksh {{ tax_record.calculate_total_tax }}</td>
+                                    <td>{{ tax_record.date_created|date:"F d, Y H:i" }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center">No tax records found</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
