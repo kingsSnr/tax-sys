@@ -9,6 +9,6 @@ class ComplianceRule(models.Model):
 
 class ComplianceCheck(models.Model):
     tax_record = models.ForeignKey('taxes.TaxRecord', on_delete=models.CASCADE)
-    rule = models.ForeignKey(ComplianceRule, on_delete=models.CASCADE, null=True, blank=True)  # Allow rule to be nullable
+    rule = models.ForeignKey(ComplianceRule, on_delete=models.CASCADE, null=True, blank=True) 
     is_compliant = models.BooleanField(default=True)
     notes = models.TextField(blank=True, null=True)
