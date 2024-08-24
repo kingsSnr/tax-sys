@@ -1,0 +1,59 @@
+<!-- templates/tax_summary.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="body d-flex py-lg-3 py-md-2">
+    <div class="container-xxl">
+        <div class="row align-items-center">
+            <div class="border-0 mb-4">
+                <div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
+                    <h3 class="fw-bold mb-0">Tax Summary</h3>
+                    <a href="?download=pdf" class="btn btn-secondary">Download PDF</a>
+                </div>
+            </div>
+        </div>
+        <div class="row clearfix g-3">
+            <div class="col-sm-12">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5>Tax Summary from {{ from_date }} to {{ to_date }}</h5>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Tax Year</th>
+                                    <th>Income</th>
+                                    <th>VAT</th>
+                                    <th>Other Taxes</th>
+                                    <th>Total Tax</th>
+                                    <th>Date Created</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for tax_record in tax_records %}
+                                    <tr>
+                                        <td>{{ tax_record.tax_year }}</td>
+                                        <td>{{ tax_record.income }}</td>
+                                        <td>{{ tax_record.vat }}</td>
+                                        <td>{{ tax_record.other_taxes }}</td>
+                                        <td>{{ tax_record.calculate_total_tax }}</td>
+                                        <td>{{ tax_record.date_created|date:"F d, Y H:i" }}</td>
+                                    </tr>
+                                {% endfor %}
+                                <tr class="font-weight-bold">
+                                    <td>Total</td>
+                                    <td>{{ total_income }}</td>
+                                    <td>{{ total_vat }}</td>
+                                    <td>{{ total_other_taxes }}</td>
+                                    <td>{{ total_income|add:total_vat|add:total_other_taxes }}</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

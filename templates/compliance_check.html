@@ -22,4 +22,44 @@
         </div>
     </div>
 </div>
+
+<!-- Modal -->
+{% if messages %}
+<div class="modal fade show" id="complianceModal" tabindex="-1" aria-labelledby="complianceModalLabel" aria-modal="true" role="dialog" style="display: block;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header {% if messages.first.tags == 'success' %}bg-success text-white{% elif messages.first.tags == 'error' %}bg-danger text-white{% elif messages.first.tags == 'warning' %}bg-warning text-dark{% endif %}">
+                <h5 class="modal-title" id="complianceModalLabel">Compliance Check Result</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} mb-2">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const complianceModal = new bootstrap.Modal(document.getElementById('complianceModal'));
+        complianceModal.show();
+
+        // Automatically close the modal after 5 seconds
+        setTimeout(function() {
+            complianceModal.hide();
+        }, 5000);
+
+        // Ensure the modal can be manually closed
+        document.querySelector('.btn-close').addEventListener('click', function() {
+            complianceModal.hide();
+        });
+    });
+</script>
+{% endif %}
 {% endblock %}

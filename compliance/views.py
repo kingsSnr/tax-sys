@@ -16,6 +16,15 @@ from django.contrib import messages
 from .models import ComplianceCheck
 from taxes.models import TaxRecord
 
+from decimal import Decimal
+
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import ComplianceCheck, ComplianceRule
+from taxes.models import TaxRecord
+from decimal import Decimal
+
 @login_required
 def index_view(request):
     total_income_tax = TaxRecord.objects.filter(user=request.user).aggregate(total_income=models.Sum('income'))['total_income'] or 0
@@ -36,7 +45,6 @@ def index_view(request):
     return render(request, 'index.html', context)
 
 
-from decimal import Decimal
 
 def check_compliance_view(request):
     if request.method == 'POST':
@@ -45,25 +53,26 @@ def check_compliance_view(request):
         try:
             tax_record = TaxRecord.objects.get(id=tax_record_id, user=request.user)
         except TaxRecord.DoesNotExist:
-            messages.error(request, 'No TaxRecord matches the given ID.')
+            messages.error(request, 'No Tax Record matches the given ID.')
             return redirect('compliance_check')
 
         if tax_record.vat > 0:
             expected_vat = tax_record.income * Decimal('0.16')
             if tax_record.vat == expected_vat:
                 compliant = True
-                message = 'VAT is compliant'
+                message = 'VAT is compliant.'
                 messages.success(request, message)
             else:
                 compliant = False
                 message = f'VAT is not compliant. Expected {expected_vat}, but got {tax_record.vat}.'
                 messages.error(request, message)
 
+        
         elif tax_record.income > 0:
             expected_income_tax = tax_record.income * Decimal('0.30')
             if tax_record.income == expected_income_tax:
                 compliant = True
-                message = 'Income tax is compliant'
+                message = 'Income tax is compliant.'
                 messages.success(request, message)
             else:
                 compliant = False
@@ -73,8 +82,9 @@ def check_compliance_view(request):
         else:
             compliant = False
             message = 'No valid tax type found for compliance check.'
-            messages.error(request, message)
+            messages.warning(request, message)
 
+        
         ComplianceCheck.objects.create(
             tax_record=tax_record,
             rule=None,
@@ -85,3 +95,17 @@ def check_compliance_view(request):
         return redirect('compliance_check')
 
     return render(request, 'compliance_check.html')
+
+
+
+
+
+@login_required
+def check_quarterly_compliance_view(request):
+    non_compliant_records = TaxRecord.objects.filter(user=request.user).filter(quarterly_payments__lt=Sum('income') * 0.9 / 4)
+
+    context = {
+        'non_compliant_records': non_compliant_records,
+    }
+
+    return render(request, 'quarterly_compliance.html', context)

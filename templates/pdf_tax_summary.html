@@ -1,0 +1,40 @@
+<!-- templates/pdf_tax_summary.html -->
+{% extends 'printable_base.html' %}
+{% load static %}
+
+{% block content %}
+<h3 style="text-align: center;">Tax Summary Report</h3>
+<p><strong>Period:</strong> {{ from_date }} to {{ to_date }}</p>
+<table class="table table-bordered" style="width: 100%; border-collapse: collapse;">
+    <thead>
+        <tr>
+            <th>Tax Year</th>
+            <th>Income</th>
+            <th>VAT</th>
+            <th>Other Taxes</th>
+            <th>Total Tax</th>
+            <th>Date Created</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for tax_record in tax_records %}
+            <tr>
+                <td>{{ tax_record.tax_year }}</td>
+                <td>{{ tax_record.income }}</td>
+                <td>{{ tax_record.vat }}</td>
+                <td>{{ tax_record.other_taxes }}</td>
+                <td>{{ tax_record.calculate_total_tax }}</td>
+                <td>{{ tax_record.date_created|date:"F d, Y H:i" }}</td>
+            </tr>
+        {% endfor %}
+        <tr class="font-weight-bold">
+            <td>Total</td>
+            <td>{{ total_income }}</td>
+            <td>{{ total_vat }}</td>
+            <td>{{ total_other_taxes }}</td>
+            <td>{{ total_income|add:total_vat|add:total_other_taxes }}</td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+{% endblock %}

@@ -31,7 +31,7 @@
                 
                 <!-- Menu: main ul -->
                 <ul class="menu-list flex-grow-1 mt-3">
-                    <li><a class="m-link active" href=""><i class="icofont-home fs-5"></i> <span>Dashboard</span></a></li>
+                    <li><a class="m-link active" href="{% url 'index' %}"><i class="icofont-home fs-5"></i> <span>Dashboard</span></a></li>
                     <li class="collapsed">
                         <a class="m-link" data-bs-toggle="collapse" data-bs-target="#menu-taxes" href="">
                             <i class="icofont-ui-calculator fs-5"></i> <span>Taxes</span> <span class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
@@ -55,7 +55,7 @@
                             <i class="icofont-file-document fs-5"></i> <span>Reports</span> <span class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
                             <!-- Menu: Sub menu ul -->
                             <ul class="sub-menu collapse" id="menu-reports">
-                                <li><a class="ms-link" href="">Generate Reports</a></li>
+                                <li><a class="ms-link" href="{% url 'tax_summary_selection' %}">Generate Reports</a></li>
                             </ul>
                     </li>
                 </ul>

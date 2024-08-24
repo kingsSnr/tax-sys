@@ -30,6 +30,8 @@
                                     <th>Income</th>
                                     <th>VAT</th>
                                     <th>Other Taxes</th>
+                                    <th>Quarterly Payments</th>
+                                    <th>Section 179 Deduction</th>
                                     <th>Total Tax</th>
                                     <th>Date Created</th>
                                     <th>Actions</th>
@@ -40,10 +42,12 @@
                                     <tr>
                                         <td>{{ tax_record.id }}</td>
                                         <td>{{ tax_record.tax_year }}</td>
-                                        <td>Ksh {{ tax_record.income }}</td>
-                                        <td>Ksh {{ tax_record.vat }}</td>
-                                        <td>Ksh {{ tax_record.other_taxes }}</td>
-                                        <td>Ksh {{ tax_record.calculate_total_tax }}</td>
+                                        <td>{{ tax_record.income }}</td>
+                                        <td>{{ tax_record.vat }}</td>
+                                        <td>{{ tax_record.other_taxes }}</td>
+                                        <td>{{ tax_record.quarterly_payments }}</td>
+                                        <td>{{ tax_record.section_179_deduction }}</td>
+                                        <td>{{ tax_record.calculate_total_tax }}</td>
                                         <td>{{ tax_record.date_created|date:"F d, Y H:i" }}</td>
                                         <td>
                                             <a href="{% url 'delete_tax' tax_record.id %}" class="btn btn-danger btn-sm">Delete</a>
@@ -51,7 +55,7 @@
                                     </tr>
                                 {% empty %}
                                     <tr>
-                                        <td colspan="7" class="text-center">No tax records found.</td>
+                                        <td colspan="10" class="text-center">No tax records found.</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
@@ -105,6 +109,14 @@
                         <div class="col-sm-12">
                             <label for="tax_year" class="form-label">Tax Year</label>
                             <input type="number" class="form-control" id="tax_year" name="tax_year" required>
+                        </div>
+                        <div class="col-sm-12">
+                            <label for="quarterly_payment" class="form-label">Quarterly Payments</label>
+                            <input type="number" step="0.01" class="form-control" id="quarterly_payment" name="quarterly_payment" required>
+                        </div>
+                        <div class="col-sm-12">
+                            <label for="section_179_deduction" class="form-label">Section 179 Deduction</label>
+                            <input type="number" step="0.01" class="form-control" id="section_179_deduction" name="section_179_deduction" required>
                         </div>
                     </div>
                     <div class="modal-footer">

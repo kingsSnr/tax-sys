@@ -33,7 +33,10 @@ urlpatterns = [
     path('logout/', user_views.logout_view, name='logout'),
     path('', user_views.index_view, name='index'),
     path('compliance-check/', compliance_views.check_compliance_view, name='compliance_check'),
-    path('generate-report/<int:tax_record_id>/', report_views.generate_report_view, name='generate_report'),
+    path('check-quarterly-compliance/', compliance_views.check_quarterly_compliance_view, name='check_quarterly_compliance'),
+    path('reports/', report_views.tax_summary_view, name='tax_summary_selection'),
+    path('generate-tax-report/<str:from_date>/<str:to_date>/', report_views.generate_tax_report_view, name='generate_tax_report'),
+
 
     re_path(r'^accounts/login/$', lambda request: redirect('/')),
 

@@ -9,11 +9,22 @@ from django.db.models import Q
 from django.contrib import messages
 from .models import TaxRecord
 
+# taxes/views.py
+
+from django.shortcuts import render, redirect
+from .models import TaxRecord
+from django.core.paginator import Paginator
+from django.db.models import Q
+from django.contrib import messages
+from django.db.models import Sum
+
 def calculate_tax_view(request):
     if request.method == 'POST':
         tax_type = request.POST['tax_type']
         amount = float(request.POST['amount'])
         tax_year = int(request.POST['tax_year'])
+        quarterly_payment = float(request.POST.get('quarterly_payment', 0))
+        section_179_deduction = float(request.POST.get('section_179_deduction', 0))
 
         # Calculate tax based on type
         if tax_type == 'VAT':
@@ -34,13 +45,18 @@ def calculate_tax_view(request):
             income=income,
             vat=vat,
             other_taxes=other_taxes,
-            tax_year=tax_year
+            tax_year=tax_year,
+            quarterly_payments=quarterly_payment,
+            section_179_deduction=section_179_deduction
         )
 
         messages.success(request, 'Tax record added successfully.')
         return redirect('tax_list')
 
     return render(request, 'taxes.html')
+
+
+
 
 
 
